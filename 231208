@@ -1,0 +1,100 @@
+spring boot 첫시간
+세팅 후
+React API란
+데이터와 기능의 집합을 제공하여 컴퓨터 프로그램 간의 상호작을 촉진하며,정보 교환
+openAPI는 대부분 React API로 제공
+설계에 대한것
+Resetfull은 일반으로 reset라는 아키텍처를 구현하는 웹 서비스를 나타내기 위해
+JPA(Java Persistence API)자바 진영의 ORM 기술 표준
+- JPA가 제공하는 API 사용시 직접 sql을 작성하지 않아도됨
+- sql생성하고 db에 전달 객체를 자동으로 mapping
+- 내부적으로 jdbc api 활용 (개발자가 직접 활용 시 패러다임 불일치, sql 의존성 등 문제가 생김)
+
+ORM(Object-Realational-Mapping)은 객체와 관계형 DB를 매핑한다는 뜻
+- 적절한 sql를 생성하여 db에 저장
+
+Hibernate
+자바 진영의 다양한 ORM프레임워크 중 가장 많이 사용되는 곳
+Hibernate 기반으로 만들어진 ORM 기술이 JPA이다
+(JPA 사용시 HIbernate를 사용하면됨)
+
+- CSR은 서버에서 보내준 데이터를 가지고 클라이언트에서 화면을 그리는 방식
+- SSR은 서버가 직접 데이터를 가지고 화면을 만들어서 클라이언트에게 전달해 주는 방식
+- SSR 방식을 사용할 경우 서버 사이드 템플릿 엔진을 사용해야 하며 종류로는 Thymeleaf, Mustache, JSP 등
+ 이 있지만 요즘은 Thymeleaf를 주로 사용함
+
+application.properties는 하나하나 server에 관련된거여도 server.~라고 치는 불편한 점이 있다
+이것이 불편해서 요즘은 
+application.yml(율) 사용
+타임리프 사용
+1.율에 정의
+spring:
+  thymeleaf:
+    prefix: classpath:templates/
+      suffix: .html
+        mode:HTML5
+
+
+2.html에 정의
+<html xmlns:th="http://www.thymeleaf.org">를 선언
+
+타임리프에 가장 기본적인 기능 사용
+html 태그 속성
+<span th:text="${data}">
+html 영역 안 직접 데이터 출력
+[[${data}]]
+
+controller생성
+ex)
+@Controller
+@RequestMapping(value = "/basic")
+public class BasicController {
+    @GetMapping("/text-basic")
+    public String textBasic(Model model){
+        model.addAttribute("data","Hello Spring");
+        return "basic/text-basic";
+    }
+}
+
+/basic/text-basic.html생성
+율에 정의한대로 resources/templates아래에 만들어야함
+ex)
+<!DOCTYPE html>
+<html xml:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>컨텐츠 데이터 출력하기</h1>
+<ul>
+    <li>th:text 사용<span th:text="${data}"></span></li>
+    <li>컨텐츠 안에서 직접 출력하기 = [[${data}]]</li>
+</ul>
+
+<div th:
+</body>
+</html>
+여기서 
+<li>th:text 사용<span th:text="${data}"></span></li>에 controller 안에 있는 데이터가 html태그나 특수문자가 섞여 있으면 그대로출력
+        text 말고 utext 사용시 html태그나 특수문자 태그 반영
+        text -> utext
+        [[...]] ->  [(...)]    
+
+
+변수 표현식 ${...}을 사용
+Object
+data.field : data의 field 프로퍼티에 접근
+data['field'] : 위와 똑같다
+data.getField() : data에 getField()메서드를 직접 호출
+
+List
+list[0].field : List 첫번째 데이터를 찾 field 프로퍼티에 접근
+list[0]['field'] : 위와 똑같다
+list[0].getField() : List에서 첫번째 값을 찾아 직접 메서드 호출
+list.get(0).xxx : List의 get메서드를 통해 데이터를 찾아 프로퍼티에 접근 가능
+
+Map
+map['key'].field  : Map에서 Key를 찾아 field 프로퍼티에 접근한다.
+map['key']['field'] : 위에랑 똑같다
+map['key'].getField() : Map에서 key를 찾아 직접 메드 호출
