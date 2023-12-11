@@ -1,0 +1,108 @@
+mysql 연결
+새프로젝트 만들때
+
+MyBatis Framework와 My SQL Driver 추가
+--------------------------------------
+yml에 sql 연결 설정
+spring:
+  dataSource:
+    driver-class-name : com.mysql.cj.jdbc.Driver
+    url : jdbc:mysql://localhost:3306/(데이터베이스이름)?serverTimezone=UTC&characterEncoding=UTF-8  
+    username : root
+    password : (비밀번호)
+
+후에 
+
+똑같이 thymeleaf 설정
+---------------------------------------
+Board클래스에 어노테이션으로 getter setter
+---------------------------------------
+MapperInterface 설정하기
+@Repository - 인터페이스가 저장라는 것을 명시
+ex)
+@Repository
+public interface BoardMapper {
+    int boardCount();
+
+   List<Board> getList();
+
+}
+----------------------------------------
+Mapper.xml설정
+경로를 mapper와 똑같이 설정해야된다
+com폴더 밑에 example 폴더 밑에 이런식
+
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+mapper DTD 설정 후 
+mapper쓰기
+
+ex)
+<mapper namespace = "com.example.mysqldb.mapper.BoardMapper">
+    <select id="boardCount" resultType="int"> //반환값이 int
+        select count(boardId) as cnt from tbl_board
+
+    </select>
+
+    <select id="getList" resultType="com.example.mysqldb.domain.Board">
+        select * from tbl_board
+    </select>
+</mapper>
+-------------------------------------------
+프로젝트 메인.java에
+@SpringBootApplication
+@MapperScan(basePackages = "com.example.mysqldb")
+public class MySqlDbApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(MySqlDbApplication.class, args);
+    }
+
+}
+Mybatis설정
+@MapperScan 어노테이션을 사용하여 base-Packages="패키지 경로"
+패키지 밑에 있 Mapper들을 빈으로 등록하고 인식할 수 있게
+
+---------------------------------------------
+서비스 
+controller과 mapper 처럼 폴더 생성한 후 밑에다가 생성
+@Service 어노테이션으로 서비스 작업을 할 수 있게
+@RequiredArgsConstructor으로 mapper생성자를 사용할 수 있게
+
+BoardMapper -> BoardMapper.xml을 통해 반환된 값을 controller에 보내는것
+----------------------------------------------
+controller 작성하면 끝
+---------------------------------------------
+<html xmlns:th="http://www.thymeleaf.org">
+html파일에 타임리프를 사용한다고 작성해줘야한다
+
+css은 부트스트랩사
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+
+select , insert 등등 하면 됨
+
+
+타임리프 하이퍼링크
+<td><a th:href="@{/board/view(boardId=${list.boardId})}">[[${list.title}]]</a> </td>
+
+타임리프 form
+<form id="form" th:action="@{/}" method="post">
+    </form>
+
+
+트랜젝션 
+insert나 delete나 구조의 변화가 일어나는 것
+
+
+Rest controller
+요즘은 json을 많이 사용해
+Data를 반환해야 하는 경우
+@ResponseBody 어노테이션을 활용
+이를 통해 Controller도 Json 형태로 데이터를 반환
+
+controller 
+전통적인 방식
+Spring MVC의 컨트롤러
+view를 반환
