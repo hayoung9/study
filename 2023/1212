@@ -1,0 +1,30 @@
+spring의 꽃
+JPA
+my batis 는 대형프로젝트
+JPA는 대형 프로젝트 x
+
+JPA
+Controller/Entity/Repository로 나뉨
+Controller - 자바 로직 수행
+Entity - 테이블 정보 설정
+Repository - 쿼리 정보 설정
+
+
+
+findAll
+findId
+JpaRepository에서 사용할 수 있게 해줌
+
+
+
+jpa설정해야됨
+ex)  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    show-sql: true
+    hibernate:
+      ddl-auto: create //할때마다 생성 | update는 기존의 테이블이 있으면 만들어지지 않음
+    properties:
+      hibernate:
+        format_sql: true 
+
+시험기간 끝나고 다시
